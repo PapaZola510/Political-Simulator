@@ -12,7 +12,7 @@ return new class extends Migration
         if ($driver === 'mysql') {
             DB::statement('ALTER TABLE games DROP INDEX games_session_id_unique');
         } elseif ($driver === 'pgsql') {
-            DB::statement('DROP INDEX IF EXISTS games_session_id_unique');
+            DB::statement('ALTER TABLE games DROP CONSTRAINT IF EXISTS games_session_id_unique');
         }
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
         if ($driver === 'mysql') {
             DB::statement('ALTER TABLE games ADD UNIQUE KEY games_session_id_unique (session_id)');
         } elseif ($driver === 'pgsql') {
-            DB::statement('CREATE UNIQUE INDEX games_session_id_unique ON games (session_id)');
+            DB::statement('ALTER TABLE games ADD CONSTRAINT games_session_id_unique UNIQUE (session_id)');
         }
     }
 };
