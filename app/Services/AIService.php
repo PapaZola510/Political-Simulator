@@ -609,7 +609,7 @@ EOT;
         try {
             Log::info('Claude API called', ['prompt_length' => strlen($prompt), 'model' => $this->model]);
             
-            $client = new Client($this->apiKey);
+            $client = new Client($this->apiKey, ['timeout' => 30, 'connect_timeout' => 10]);
             
             $response = $client->messages->create(
                 512, // max_tokens - keep responses SHORT
@@ -621,7 +621,7 @@ EOT;
                 ],
                 $this->model
             );
-
+            
             $content = $response->content[0]->text ?? '';
             Log::info('Claude API response', ['content_length' => strlen($content)]);
             return $content;

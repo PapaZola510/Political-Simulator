@@ -71,12 +71,16 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
     }, []);
 
     const getReactionColor = (abbr: string): string => {
-        const reaction = stateReactions[abbr] ?? 0;
-        const normalized = Math.max(0, Math.min(1, (reaction + 25) / 50));
-        const r = Math.round(255 * normalized);
-        const g = Math.round(100 * (1 - Math.abs(normalized - 0.5) * 2));
-        const b = Math.round(255 * (1 - normalized));
-        return `rgb(${r}, ${g}, ${b})`;
+        const reaction = stateReactions[abbr] ?? 50;
+        const band = stateBands?.[abbr]?.band;
+        
+        if (reaction >= 75 || band === 'strongly_supports') return 'rgb(0, 100, 255)';  // Strong blue
+        if (reaction >= 65 || band === 'supports') return 'rgb(50, 150, 255)';  // Blue
+        if (reaction >= 55 || band === 'leans_support') return 'rgb(100, 200, 255)';  // Light blue
+        if (reaction >= 45 || band === 'neutral') return 'rgb(200, 200, 200)';  // Gray
+        if (reaction >= 35 || band === 'leans_oppose') return 'rgb(255, 150, 150)';  // Light red
+        if (reaction >= 25 || band === 'opposes') return 'rgb(255, 100, 100)';  // Red
+        return 'rgb(255, 50, 50)';  // Strong red
     };
 
     const sortedStates = useMemo(() => {
@@ -127,16 +131,16 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
                 </svg>
                 <div className="flex justify-center mt-4 gap-4 text-xs">
                     <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(255, 100, 0)' }} />
-                        <span>Strong Support</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(128, 100, 128)' }} />
-                        <span>Neutral</span>
-                    </div>
-                    <div className="flex items-center gap-1">
                         <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(0, 100, 255)' }} />
-                        <span>Strong Opposition</span>
+                        <span>Strong Support (75+)</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(200, 200, 200)' }} />
+                        <span>Neutral (45-54)</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(255, 50, 50)' }} />
+                        <span>Strong Opposition (&lt;25)</span>
                     </div>
                 </div>
             </div>

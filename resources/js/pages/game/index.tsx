@@ -1,5 +1,5 @@
 import { Head, usePage, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StateOutlookMap from '@/components/game/StateOutlookMap';
 import StatsPanel from '@/components/game/StatsPanel';
 import USMap from '@/components/game/USMap';
@@ -130,6 +130,12 @@ export default function GamePage() {
     const [showLoadModal, setShowLoadModal] = useState(false);
     const [saves, setSaves] = useState<any[]>([]);
     const [saveName, setSaveName] = useState('');
+
+    useEffect(() => {
+        setLoadingResponse(false);
+        setLoadingStateOutlook(false);
+        setLoadingVoterReaction(false);
+    }, [currentPhase]);
 
     const monthName = months[(state.month - 1) % 12];
 
