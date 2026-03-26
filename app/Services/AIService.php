@@ -620,16 +620,16 @@ EOT;
             
             $client = new Client($this->apiKey);
             
-            $response = $client->messages->create([
-                'model' => $this->model,
-                'max_tokens' => 512,
-                'messages' => [
+            $response = $client->messages->create(
+                512,
+                [
                     [
                         'role' => 'user',
                         'content' => 'IMPORTANT: Keep all responses VERY SHORT. Headlines: 5-8 words max. Body text: 2 sentences ONLY, no more. Do not elaborate. Be concise.' . "\n\n" . $prompt
                     ]
-                ]
-            ]);
+                ],
+                $this->model
+            );
             
             $content = $response->content[0]->text ?? '';
             Log::info('Claude API response', ['content_length' => strlen($content)]);
