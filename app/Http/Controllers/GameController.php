@@ -2449,7 +2449,16 @@ class GameController extends Controller
         }
 
         if (!$decisionArray) {
-            return redirect('/');
+            // Try to recover with basic decision data
+            if (!empty($gameState['last_decision'])) {
+                $decisionArray = [
+                    'id' => 'custom',
+                    'label' => $gameState['last_decision'],
+                    'news' => $gameState['ai_news'] ?? [],
+                ];
+            } else {
+                return redirect('/');
+            }
         }
 
         // If AI news was generated, merge it
