@@ -609,7 +609,7 @@ EOT;
         try {
             Log::info('Claude API called', ['prompt_length' => strlen($prompt), 'model' => $this->model]);
             
-            $client = new Client($this->apiKey, ['timeout' => 30, 'connect_timeout' => 10]);
+            $client = new Client($this->apiKey);
             
             $response = $client->messages->create(
                 512, // max_tokens - keep responses SHORT
@@ -619,7 +619,8 @@ EOT;
                         'content' => 'IMPORTANT: Keep all responses VERY SHORT. Headlines: 5-8 words max. Body text: 2 sentences ONLY, no more. Do not elaborate. Be concise.' . "\n\n" . $prompt
                     ]
                 ],
-                $this->model
+                $this->model,
+                ['timeout' => 30]
             );
             
             $content = $response->content[0]->text ?? '';
