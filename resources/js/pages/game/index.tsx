@@ -132,9 +132,9 @@ export default function GamePage() {
     const [saveName, setSaveName] = useState('');
 
     useEffect(() => {
-        setLoadingResponse(false);
-        setLoadingStateOutlook(false);
-        setLoadingVoterReaction(false);
+    setLoadingResponse(false);
+    setLoadingStateOutlook(false);
+    setLoadingVoterReaction(false);
     }, [currentPhase]);
 
     const monthName = months[(state.month - 1) % 12];
@@ -275,7 +275,7 @@ export default function GamePage() {
                                         headers: {
                                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                                         },
-                                    }).then(() => window.location.href = '/president');
+                                    }).then(() => window.location.assign('/president'));
                                 }
                             }}
                             className="text-xs px-3 py-1 rounded-full border bg-red-100 border-red-400 text-red-800"

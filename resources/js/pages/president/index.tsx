@@ -19,21 +19,21 @@ export default function PresidentIndex() {
         support_strength: 'comfortable',
     });
 
-    useEffect(() => {
-        if (type === 'load') {
-            fetchSaves();
-        }
-    }, [type]);
-
     const fetchSaves = async () => {
         try {
             const res = await fetch('/game/saves');
             const data = await res.json();
             setSaves(data);
-        } catch (error) {
-            console.error('Failed to fetch saves:', error);
+        } catch (_error) {
+            console.error('Failed to fetch saves');
         }
     };
+
+    useEffect(() => {
+        if (type === 'load') {
+            fetchSaves();
+        }
+    }, [type]);
 
     const handleSubmit = () => {
         if (type === 'preset' && !preset) {
@@ -67,12 +67,12 @@ export default function PresidentIndex() {
             });
             
             if (response.ok || response.redirected) {
-                window.location.href = '/';
+                window.location.assign('/');
             } else {
                 alert('Failed to load save');
                 setLoading(false);
             }
-        } catch (error) {
+        } catch {
             alert('Failed to load save');
             setLoading(false);
         }
@@ -92,7 +92,7 @@ export default function PresidentIndex() {
                 },
             });
             fetchSaves();
-        } catch (error) {
+        } catch {
             alert('Failed to delete save');
         }
     };
