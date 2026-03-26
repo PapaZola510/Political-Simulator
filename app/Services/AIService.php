@@ -15,10 +15,15 @@ class AIService
         $this->apiKey = config('services.anthropic.key') ?? '';
         
         if (empty($this->apiKey)) {
-            throw new \Exception('ANTHROPIC_API_KEY is not set in environment');
+            Log::warning('ANTHROPIC_API_KEY not set - AI features disabled');
         }
         
         $this->model = env('ANTHROPIC_MODEL', 'claude-sonnet-4-6');
+    }
+    
+    protected function checkApiKey(): bool
+    {
+        return !empty($this->apiKey);
     }
 
     protected array $scenarioFraming = [
@@ -606,6 +611,10 @@ EOT;
 
     protected function callAPI(string $prompt): string
     {
+        if (empty($this->apiKey)) {
+            throw new \Exception('ANTHROPIC_API_KEY not configured');
+        }
+        
         try {
             Log::info('Claude API called', ['prompt_length' => strlen($prompt), 'model' => $this->model]);
             

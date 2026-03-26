@@ -3359,7 +3359,7 @@ class GameController extends Controller
                 $score -= 2;
             }
             
-            $score += (rand(-5, 5) / 10);
+            $score += rand(-8, 8);
             
             if (!empty($matchedStrongOppose)) {
                 $identityClash = 15;
@@ -3372,7 +3372,7 @@ class GameController extends Controller
                 $score -= 1;
             }
             
-            $score += (rand(-3, 3) / 10);
+            $score += rand(-5, 5);
             
             if ($color === 'swing') {
                 $totalSupportTags = count($matchedStrongSupport) + count($matchedLeanSupport);

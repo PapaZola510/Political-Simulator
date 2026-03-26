@@ -46,7 +46,7 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
                 
                 const topology = await response.json();
                 const statesData = topoFeature(topology, topology.objects.states);
-                const projection = d3.geoAlbersUsa().fitSize([800, 500], statesData);
+                const projection = d3.geoAlbersUsa().fitSize([600, 380], statesData);
                 const pathGenerator = d3.geoPath().projection(projection);
 
                 const paths = statesData.features.map((f: GeoFeature) => {
@@ -74,19 +74,19 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
         const reaction = stateReactions[abbr] ?? 50;
         const band = stateBands?.[abbr]?.band;
         
-        if (reaction >= 75 || band === 'strongly_supports') return 'rgb(0, 100, 255)';  // Strong blue
-        if (reaction >= 65 || band === 'supports') return 'rgb(50, 150, 255)';  // Blue
-        if (reaction >= 55 || band === 'leans_support') return 'rgb(100, 200, 255)';  // Light blue
-        if (reaction >= 45 || band === 'neutral') return 'rgb(200, 200, 200)';  // Gray
-        if (reaction >= 35 || band === 'leans_oppose') return 'rgb(255, 150, 150)';  // Light red
-        if (reaction >= 25 || band === 'opposes') return 'rgb(255, 100, 100)';  // Red
-        return 'rgb(255, 50, 50)';  // Strong red
+        if (reaction >= 75 || band === 'strongly_supports') return '#1e40af';  // Strong blue (dark)
+        if (reaction >= 65 || band === 'supports') return '#3b82f6';  // Blue
+        if (reaction >= 55 || band === 'leans_support') return '#93c5fd';  // Light blue
+        if (reaction >= 45 || band === 'neutral') return '#9ca3af';  // Gray
+        if (reaction >= 35 || band === 'leans_oppose') return '#fca5a5';  // Light red
+        if (reaction >= 25 || band === 'opposes') return '#ef4444';  // Red
+        return '#991b1b';  // Strong red (dark)
     };
 
     const sortedStates = useMemo(() => {
         return [...states].sort((a, b) => {
-            const aReaction = stateReactions[a.abbr] || 0;
-            const bReaction = stateReactions[b.abbr] || 0;
+            const aReaction = stateReactions[a.abbr] ?? 50;
+            const bReaction = stateReactions[b.abbr] ?? 50;
             return bReaction - aReaction;
         });
     }, [states, stateReactions]);
@@ -103,71 +103,89 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
     }
 
     return (
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
-                <svg 
-                    viewBox="0 0 800 500" 
-                    className="w-full h-auto"
-                >
-                    <g>
-                        {mapPaths.map((state) => {
-                            const reaction = stateReactions[state.abbr] ?? 0;
-                            const isHovered = hoveredState === state.abbr;
-                            return (
-                                <path
-                                    key={state.fips}
-                                    d={state.path}
-                                    fill={getReactionColor(state.abbr)}
-                                    stroke="#fff"
-                                    strokeWidth={isHovered ? 2 : 1}
-                                    opacity={isHovered ? 1 : 0.9}
-                                    className="transition-all duration-150 cursor-pointer"
-                                    onMouseEnter={() => setHoveredState(state.abbr)}
-                                    onMouseLeave={() => setHoveredState(null)}
-                                />
-                            );
-                        })}
-                    </g>
-                </svg>
-                <div className="flex justify-center mt-4 gap-4 text-xs">
+                <div className="flex justify-center">
+                    <svg 
+                        viewBox="0 0 600 380" 
+                        className="w-full max-w-2xl h-auto"
+                    >
+                        <g>
+                            {mapPaths.map((state) => {
+                                const reaction = stateReactions[state.abbr] ?? 50;
+                                const isHovered = hoveredState === state.abbr;
+                                return (
+                                    <path
+                                        key={state.fips}
+                                        d={state.path}
+                                        fill={getReactionColor(state.abbr)}
+                                        stroke="#fff"
+                                        strokeWidth={isHovered ? 2 : 0.5}
+                                        opacity={isHovered ? 1 : 0.9}
+                                        className="transition-all duration-150 cursor-pointer"
+                                        onMouseEnter={() => setHoveredState(state.abbr)}
+                                        onMouseLeave={() => setHoveredState(null)}
+                                    />
+                                );
+                            })}
+                        </g>
+                    </svg>
+                </div>
+                <div className="flex flex-wrap justify-center mt-3 gap-x-4 gap-y-1 text-xs">
                     <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(0, 100, 255)' }} />
-                        <span>Strong Support (75+)</span>
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#1e40af' }} />
+                        <span>Strong Support</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(200, 200, 200)' }} />
-                        <span>Neutral (45-54)</span>
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#3b82f6' }} />
+                        <span>Supports</span>
                     </div>
                     <div className="flex items-center gap-1">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: 'rgb(255, 50, 50)' }} />
-                        <span>Strong Opposition (&lt;25)</span>
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#93c5fd' }} />
+                        <span>Leans Support</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#9ca3af' }} />
+                        <span>Neutral</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#fca5a5' }} />
+                        <span>Leans Oppose</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#ef4444' }} />
+                        <span>Opposes</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                        <div className="w-3 h-3 rounded" style={{ backgroundColor: '#991b1b' }} />
+                        <span>Strong Oppose</span>
                     </div>
                 </div>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3">
                 <div>
-                    <h4 className="font-semibold text-blue-600 mb-2">Top 5 Supporters</h4>
-                    <div className="space-y-1">
+                    <h4 className="font-semibold text-blue-600 mb-1 text-sm">Top 5 Supporters</h4>
+                    <div className="space-y-0.5">
                         {topSupporters.map((state) => {
-                            const reaction = stateReactions[state.abbr] || 0;
+                            const reaction = stateReactions[state.abbr] ?? 50;
                             return (
-                                <div key={state.abbr} className="flex justify-between items-center text-sm">
+                                <div key={state.abbr} className="flex justify-between items-center text-xs">
                                     <span>{state.name}</span>
-                                    <span className="font-medium text-blue-600">+{reaction}</span>
+                                    <span className="font-medium text-blue-600">{reaction.toFixed(1)}</span>
                                 </div>
                             );
                         })}
                     </div>
                 </div>
                 <div>
-                    <h4 className="font-semibold text-red-600 mb-2">Top 5 Opposers</h4>
-                    <div className="space-y-1">
+                    <h4 className="font-semibold text-red-600 mb-1 text-sm">Top 5 Opposers</h4>
+                    <div className="space-y-0.5">
                         {topOpposers.map((state) => {
-                            const reaction = stateReactions[state.abbr] || 0;
+                            const reaction = stateReactions[state.abbr] ?? 50;
                             return (
-                                <div key={state.abbr} className="flex justify-between items-center text-sm">
+                                <div key={state.abbr} className="flex justify-between items-center text-xs">
                                     <span>{state.name}</span>
-                                    <span className="font-medium text-red-600">{reaction}</span>
+                                    <span className="font-medium text-red-600">{reaction.toFixed(1)}</span>
                                 </div>
                             );
                         })}
