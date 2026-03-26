@@ -1,5 +1,5 @@
 import { Head, usePage, router } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import StateOutlookMap from '@/components/game/StateOutlookMap';
 import StatsPanel from '@/components/game/StatsPanel';
 import USMap from '@/components/game/USMap';
@@ -187,13 +187,6 @@ export default function GamePage() {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
-                                        },
-                                    }).then(() => window.location.reload());
-                                } else if (value === 'consequence') {
-                                    fetch('/game/force-consequence', {
-                                        method: 'POST',
-                                        headers: {
                                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                                         },
                                     }).then(() => window.location.reload());

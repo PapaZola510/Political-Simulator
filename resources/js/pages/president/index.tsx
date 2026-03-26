@@ -24,7 +24,7 @@ export default function PresidentIndex() {
             const res = await fetch('/game/saves');
             const data = await res.json();
             setSaves(data);
-        } catch (_error) {
+        } catch {
             console.error('Failed to fetch saves');
         }
     };
