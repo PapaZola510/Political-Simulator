@@ -131,13 +131,6 @@ export default function GamePage() {
     const [saves, setSaves] = useState<any[]>([]);
     const [saveName, setSaveName] = useState('');
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => {
-        setLoadingResponse(false);
-        setLoadingStateOutlook(false);
-        setLoadingVoterReaction(false);
-    }, [currentPhase]);
-
     const monthName = months[(state.month - 1) % 12];
 
     const toggleAiContent = async () => {

@@ -30,9 +30,12 @@ export default function PresidentIndex() {
     };
 
     useEffect(() => {
-        if (type === 'load') {
-            fetchSaves();
-        }
+        const load = async () => {
+            if (type === 'load') {
+                await fetchSaves();
+            }
+        };
+        load();
     }, [type]);
 
     const handleSubmit = () => {

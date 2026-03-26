@@ -12,16 +12,6 @@ interface Props {
 }
 
 export default function StateOutlookMap({ states, stateReactions, stateBands }: Props) {
-    const getColor = (reaction: number) => {
-        if (reaction >= 15) return 'bg-blue-600';
-        if (reaction >= 8) return 'bg-blue-400';
-        if (reaction >= 3) return 'bg-blue-300';
-        if (reaction > -3) return 'bg-gray-400';
-        if (reaction > -8) return 'bg-red-300';
-        if (reaction > -15) return 'bg-red-400';
-        return 'bg-red-600';
-    };
-
     const getGradientColor = (reaction: number) => {
         const normalized = (reaction + 25) / 50;
         const r = Math.round(255 * normalized);
