@@ -2314,6 +2314,8 @@ class GameController extends Controller
 
     public function makeCustomDecision(Request $request)
     {
+        set_time_limit(120); // Allow up to 2 minutes for AI processing
+        
         $validated = $request->validate([
             'response' => 'required|string|min:10|max:1000',
             'event_id' => 'nullable|integer',
@@ -2418,6 +2420,8 @@ class GameController extends Controller
 
     public function goToStateOutlook(Request $request)
     {
+        set_time_limit(120); // Allow up to 2 minutes for AI state reactions
+        
         if ($request->isMethod('GET')) {
             return redirect('/');
         }
