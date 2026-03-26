@@ -855,7 +855,7 @@ EOT;
         foreach ($states as $state) {
             $abbr = $state['abbr'];
             if (isset($json[$abbr])) {
-                $reactions[$state['fips']] = max(0, min(100, (int)$json[$abbr]));
+                $reactions[$abbr] = max(0, min(100, (int)$json[$abbr]));
             }
         }
         

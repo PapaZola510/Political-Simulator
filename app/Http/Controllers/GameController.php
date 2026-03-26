@@ -2484,12 +2484,12 @@ class GameController extends Controller
         $stateBands = [];
         $swingStates = $this->getSwingStates();
         foreach ($this->states as $state) {
-            $fips = $state['fips'];
-            $score = $rawReactions[$fips] ?? 50;
+            $abbr = $state['abbr'];
+            $score = $rawReactions[$abbr] ?? 50;
             $band = $this->getStateBand($score);
             $isSwing = in_array($state['abbr'], $swingStates);
             $isCompetitive = $isSwing && in_array($band, ['neutral', 'leans_support', 'leans_oppose']);
-            $stateBands[$fips] = [
+            $stateBands[$abbr] = [
                 'band' => $band,
                 'is_competitive' => $isCompetitive,
             ];
@@ -3386,7 +3386,7 @@ class GameController extends Controller
             
             $score = round(max(20, min(85, $score)), 2);
             
-            $reactions[$fips] = $score;
+            $reactions[$state['abbr']] = $score;
         }
         
         return $reactions;
