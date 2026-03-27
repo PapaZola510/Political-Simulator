@@ -95,10 +95,11 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
     const topStates = useMemo(() => {
         const stateMap = new Map(states.map(s => [s.abbr.toUpperCase(), s]));
         
-        const allStates: StateWithScore[] = Object.entries(stateReactions).map(([fips, score]) => {
-            const abbr = fipsToAbbr[fips] || '';
+        const allStates: StateWithScore[] = Object.entries(stateReactions).map(([key, score]) => {
+            const abbr = key.toUpperCase();
             const stateData = stateMap.get(abbr);
             const name = stateData?.name || abbr;
+            const fips = stateData?.fips || key;
             
             let band = 'neutral';
             if (score >= 75) band = 'strongly_supports';
@@ -183,8 +184,8 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
     }
 
     const getStateInfo = (fips: string, name: string, abbr: string): StateInfo => {
-        const bandInfo = stateBands?.[fips];
-        const reaction = stateReactions[fips] ?? 50;
+        const bandInfo = stateBands?.[abbr];
+        const reaction = stateReactions[abbr] ?? 50;
         
         let band = bandInfo?.band || 'neutral';
         let isCompetitive = bandInfo?.is_competitive || false;
@@ -240,7 +241,7 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
                             <g key={state.fips}>
                                 <path
                                     d={state.path}
-                                    fill={getBandColor(stateReactions[state.fips] ?? 50)}
+                                    fill={getBandColor(stateReactions[state.abbr] ?? 50)}
                                     stroke="#fff"
                                     strokeWidth="1"
                                     className="transition-all duration-150 cursor-pointer hover:opacity-80 hover:stroke-2"
@@ -276,64 +277,43 @@ export default function StateOutlookMap({ states, stateReactions, stateBands }: 
                 <div className="mt-6 grid grid-cols-4 md:grid-cols-7 gap-2 text-center">
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['strongly_supports'], borderColor: bandColors['strongly_supports'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['strongly_supports'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 75;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 75).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Strong Sup</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['supports'], borderColor: bandColors['supports'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['supports'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 65 && score < 75;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 65 && score < 75).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Sup</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['leans_support'], borderColor: bandColors['leans_support'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['leans_support'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 55 && score < 65;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 55 && score < 65).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Leans Sup</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['neutral'], borderColor: bandColors['neutral'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['neutral'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 45 && score < 55;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 45 && score < 55).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Neutral</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['leans_oppose'], borderColor: bandColors['leans_oppose'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['leans_oppose'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 35 && score < 45;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 35 && score < 45).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Leans Opp</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['opposes'], borderColor: bandColors['opposes'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['opposes'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score >= 25 && score < 35;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score >= 25 && score < 35).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Opp</p>
                     </div>
                     <div className="p-2 rounded-lg border" style={{ backgroundColor: bandBgColors['strongly_opposes'], borderColor: bandColors['strongly_opposes'] }}>
                         <p className="text-lg font-bold" style={{ color: bandColors['strongly_opposes'] }}>
-                            {Object.keys(stateReactions).filter(fips => {
-                                const score = stateReactions[fips] ?? 50;
-                                return score < 25;
-                            }).length}
+                            {Object.entries(stateReactions).filter(([_, score]) => score < 25).length}
                         </p>
                         <p className="text-xs text-muted-foreground">Strong Opp</p>
                     </div>
