@@ -12,6 +12,7 @@
             @csrf
             <h3 class="mb-2 mt-1 text-sm font-semibold uppercase tracking-wide text-muted-foreground">Executive Decision</h3>
             <textarea class="w-full rounded-lg border bg-background p-3" name="custom_response" rows="4" placeholder="Write your course of action as President..."></textarea>
+            <p class="mt-2 text-xs text-muted-foreground">The public evaluates your actual decision and applies consequences accordingly. Thoughtful, specific responses carry more weight than vague ones.</p>
             @error('custom_response')
                 <p class="mt-2 text-sm font-semibold text-red-400">{{ $message }}</p>
             @enderror

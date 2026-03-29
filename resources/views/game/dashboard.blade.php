@@ -21,7 +21,8 @@
     <div class="grid gap-4 lg:grid-cols-12">
         <div class="space-y-4 lg:col-span-4">
             <div class="rounded-xl border border-sidebar-border/70 bg-card p-4">
-                <h2 class="mb-3 text-lg font-semibold">Core Lines</h2>
+                <h2 class="mb-1 text-lg font-semibold">Core Lines</h2>
+                <p class="mb-3 text-xs text-muted-foreground">Your three lifelines. If any one drops to 25% you lose. Impeachment, Coup, and the 25th amendment will always be on the table..</p>
                 @php
                     $stats = [
                         ['label' => 'Approval Rating', 'value' => $game->approval, 'delta' => $latestTurn?->approval_delta ?? 0, 'bar' => 'bg-green-500', 'bg' => 'bg-green-950', 'text' => 'text-green-500'],
@@ -52,7 +53,8 @@
             </div>
 
             <div class="rounded-xl border border-sidebar-border/70 bg-card p-4">
-                <h2 class="mb-3 text-lg font-semibold">Voter Opinions</h2>
+                <h2 class="mb-1 text-lg font-semibold">Voter Opinions</h2>
+                <p class="mb-3 text-xs text-muted-foreground">Each group reacts differently to your decisions based on their priorities.</p>
                 <div class="max-h-[230px] space-y-2 overflow-y-auto pr-2 text-sm">
                     @php
                         $voters = [
@@ -82,7 +84,8 @@
 
         <div class="space-y-4 lg:col-span-8">
             <div class="rounded-xl border border-sidebar-border/70 bg-card p-4">
-                <h2 class="mb-3 text-lg font-semibold">Electoral Map</h2>
+                <h2 class="mb-1 text-lg font-semibold">Electoral Map</h2>
+                <p class="mb-3 text-xs text-muted-foreground">States that support your decisions gradually shift toward your party. States that oppose them shift away. Hover a state to see its current standing and how much electoral vote that state gives.</p>
                 <svg id="us-map" viewBox="0 0 960 600" class="max-h-[330px] w-full"></svg>
                 <div id="hover-state" class="mt-4 hidden rounded-lg border bg-card p-4 text-sm"></div>
                 <div class="mt-4 flex items-center gap-3 text-center">
